@@ -113,4 +113,52 @@ list_divide(L,X,Y,Z):-
 	list_len(Y,N2),
 	list_len(Z,N3),
 	N1 = N2 ,
-	N2 = N3 .
+    N2 = N3 ,
+    !.
+
+print_list([]) .
+print_list([H|T]):-
+    write(H),
+    write(' '),
+    print_list(T),
+    !.
+
+
+delete_last_three_elements(L,L1) :-
+    list_len(L,N1),
+    N1 > 3 ,
+    list_con(L1,X,L),
+    list_len(X,N),
+    N = 3 .
+delete_first_three_elements(L,L1) :-
+    list_len(L,N1),
+    N1 > 3 ,
+    list_con(X,L1,L),
+    list_len(X,N),
+    N = 3 ,
+    !.
+delete_first_and_last_three_elements(L,L1) :-
+    list_len(L,N) ,
+    N >= 6 ,
+    delete_last_three_elements(L,X),
+    delete_first_three_elements(X,L1),
+    !.
+
+last_item(I,L) :- 
+    list_len(L,N1),
+    N1 > 1 ,
+    list_con(_,I,L),
+    list_len(I,N),
+    N = 1 ,
+    !.
+
+delete_item(I,[I|T], T) .
+delete_item(I,[H|T],[H|T1]):-
+    delete_item(I,T,T1).
+
+insert(I,L,NL) :-
+    delete_item(I,NL,L).
+    
+
+
+
