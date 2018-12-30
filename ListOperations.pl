@@ -3,7 +3,9 @@
 mymember(X,[X|_]).
 mymember(X,[_|T]) :- 
     mymember(X,T) .
-
+mem(X,[H|T]):-
+    X = H ;
+    mem(X,T).
 
 list_len([],0) .
 list_len([_|T],N) :-    
@@ -51,6 +53,41 @@ check_list(L) :-
 list_con([],L,L) .
 list_con( [H|T] ,L,[H|T1] ) :-  
     list_con(T,L,T1) .
+
+union([],L,L).
+union([H|T],L2,L3):-
+    mem(H,L2) , union(T,L2,L3).
+union([H|T],L2,[H|T3]):-
+    \+ mem(H,L2) , union(T,L2,T3).
+
+intersection([],_,[]).
+intersection([H|T],L2,[H|T3]):-
+    mem(H,L2) , intersection(T,L2,T3).
+
+intersection([H|T],L2,L3):-
+    \+ mem(H,L2) , intersection(T,L2,L3).
+
+split([],[],[]).
+split([A],[],[A]).
+split([A,B|T],[A|T2],[B|T3]):-
+    split(T,T2,T3).
+mergeSort([],[]).
+mergeSort([A],[A]).
+mergeSort(L,SL):-
+    split(L,A,B),
+    mergeSort(A,SA),
+    mergeSort(B,SB),
+    merge(SA,SB,SL).
+merge(A,[],A).
+merge([],B,B).
+merge([A|T],[E|T2],[A|T3]):-
+    A =< E ,
+    merge(T,[E|T2],T3).
+merge([A|T],[E|T2],[E|T3]):-
+    E < A ,
+    merge(T2,[A|T],T3).
+
+
 
 
 
