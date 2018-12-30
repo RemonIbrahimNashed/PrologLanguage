@@ -1,4 +1,5 @@
 
+
 swap([N1,N2|T],[N2,N1|T]) :- N1 > N2 .
 swap([H|T],[H|T1]) :- swap(T,T1) .
 
