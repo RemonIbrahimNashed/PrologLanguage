@@ -17,5 +17,12 @@ print_list([H|T]) :-
     write(" "),
     print_list(T).
 
+listCon([],L,L).
+listCon([H|T],L,[H|T1]):-
+    listCon(T,L,T1).
+lastElement([H|T],X):-
+    
+
+
 
 

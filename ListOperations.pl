@@ -71,6 +71,7 @@ split([],[],[]).
 split([A],[],[A]).
 split([A,B|T],[A|T2],[B|T3]):-
     split(T,T2,T3).
+
 mergeSort([],[]).
 mergeSort([A],[A]).
 mergeSort(L,SL):-
@@ -78,6 +79,7 @@ mergeSort(L,SL):-
     mergeSort(A,SA),
     mergeSort(B,SB),
     merge(SA,SB,SL).
+
 merge(A,[],A).
 merge([],B,B).
 merge([A|T],[E|T2],[A|T3]):-

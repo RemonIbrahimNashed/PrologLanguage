@@ -1,6 +1,3 @@
-
-
-
 write_on_file(File ,Text):-
     open(File, append, Stream) ,
     write(Stream,Text),
