@@ -4,7 +4,7 @@ write_on_file(File ,Text):-
     nl(Stream),
     close(Stream).
 
-r2(File):-
+read_from_file(File):-
     open(File,read,Stream),
     get_char(Stream, Char1),
     process_the_stream(Char1,Stream),

@@ -6,6 +6,7 @@ main(S):-
 
 parser(S) :-
     tokenize_atom(S, TokenList) , 
+    tokenize
     assignment_stmt(TokenList).
 
 assignment_stmt([F|T]):-
@@ -29,7 +30,8 @@ assignment_stmt([F|T]):-
     write_ln("it is assignment statmemt with factor(digit/id) in rhs"), 
     !;
     write_ln("it is not assignment statmemt with factor(digit/id) in rhs") , 5 == 0 . 
-        
+
+
 exp([F|T]):-
     factor(F) ,
     front_token(T,F1,T1) ,
@@ -39,7 +41,10 @@ exp([F|T]):-
     front_token(T2,F3,_) ,
     semi(F3),
     ! .
-   
+factor([H|_]):-
+    digit(H), ! ;
+    id(H) , ! .
+
 factor(Factor):-
     digit(Factor),! ;
     id(Factor),!.
