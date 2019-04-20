@@ -1,5 +1,5 @@
 
-%read from output file the OneBig StringCode
+%read the source code file as one string
 read(File,End,String):-
     open(File,read,In),
     read_string(In, "", "", End, String).
