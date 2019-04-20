@@ -1,0 +1,77 @@
+{
+    x=5;
+    a='c';
+    x++;
+    --x;
+    if(x>0){
+        x--;
+    }else if(x<0){
+        x++;
+    }else{
+        x=0;
+    }
+    switch(a){
+        case 'b':
+            x++;
+        case 'c':
+            break;
+        default:
+            a = 'v';
+            break;
+    }
+    while(x>=10){
+        if(x>0){
+            x--;
+        }else if(x<0){
+            x++;
+        }else{
+            x=0;
+        }
+        switch(a){
+            case 'b':
+                x++;
+            case 'c':
+                break;
+            default:
+                a = 'v';
+                break;
+        }
+
+    }
+    for(;x>=10;x--){
+        if(x>0){
+           x--;
+        }else if(x<0){
+            x++;
+        }else{
+            x=0;
+        }
+        switch(a){
+            case 'b':
+                x++;
+            case 'c':
+                break;
+            default:
+                a = 'v';
+                break;
+        }
+    }
+    do{
+        if(x>0){
+            x--;
+        }else if(x<0){
+            x++;
+        }else{
+            x=0;
+        }
+        switch(a){
+            case 'b':
+                x++;
+            case 'c':
+                break;
+            default:
+                a = 'v';
+                break;
+        }
+    }while(x<=10);
+}

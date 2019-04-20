@@ -1,83 +1,56 @@
-% %read from source code RFile , and out after preProcessing to WFile
-% read_from_file(RFile,WFile ):-
-%     open(RFile,read,Stream),
-%     get_char(Stream, Char1),
-%     process_the_stream(Char1,Stream,WFile),
-%     close(Stream).
-% process_the_stream(end_of_file , _ ,_) :- ! .
-% process_the_stream(Char,Stream,WFile):-
-%     Char \= '\n' , 
-%     Char \= '\t' ,
-%     Char \= ' ',
-%     write(Char),
-%     write_on_file(WFile, Char),
-%     get_char(Stream,Char2),
-%     process_the_stream(Char2,Stream,WFile), !;
 
-%     get_char(Stream,Char2),
-%     process_the_stream(Char2,Stream,WFile),!.
-   
+%read from output file the OneBig StringCode
+read(File,End,String):-
+    open(File,read,In),
+    read_string(In, "", "", End, String).
 
-% write_on_file(File ,Text):-
-%     open(File, append, Stream) ,
-%     write(Stream,Text),
-%     close(Stream).
-
-% %read from output file the OneBig StringCode
-% read(File,End,String):-
-%     open(File,read,In),
-%     read_string(In, "\n", "\r\t ", End, String).
+parse_from_file(SourceFile):-
+    read(SourceFile,_,CodeAsOneBigString),
+    write(CodeAsOneBigString),nl,
+    parse_from_string(CodeAsOneBigString).
 
 
-
-% main(SourceFile,OutputFileAfterPreProccesing):-
-%     read_from_file(SourceFile, OutputFileAfterPreProccesing),
-%     read(OutputFileAfterPreProccesing,_,CodeAsOneBigString),
-%     write(CodeAsOneBigString),
-%     atom_chars(CodeAsOneBigString, TokenList) ,
-%     stmt(TokenList,[]) ,
-%     write("syntax free"), 
-%     ! ;
-%     write("syntax error").
-
-
-main(SourceCode):-
+parse_from_string(SourceCode):-
     atom_chars(SourceCode, TokenList) ,
+    % while_stmt(TokenList,[]),
     stmts(TokenList,[]) ,
     write("syntax free"), 
     ! ;
-    write("syntax error").
+    write("syntax error"),!.
 
 
 
-stmt --> skip , assignment_stmt ,skip|skip,switch_case_stmt,skip| skip,if_stmt,skip|skip, while_stmt ,skip| skip,for_stmt, skip|skip , do_while_stmt ,skip|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip.
-stmts --> skip ,stmt , skip ,stmts,skip | [] .
+stmt --> skip , assignment_stmt ,skip,!|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
+stmts --> skip ,stmt , skip ,stmts,skip | [] ,!.
 
-assignment_stmt --> assignment_exp, skip , semicolon_op , skip |skip ,  postfix_exp , skip , semicolon_op , skip |skip ,  prefix_exp , skip , semicolon_op , skip .
+assignment_stmt --> assignment_exp, skip , semicolon_op , skip ,!|skip ,  postfix_exp , skip , semicolon_op , skip,! |skip ,  prefix_exp , skip , semicolon_op , skip ,!.
 
-assignment_exp --> id ,skip, assignment_op ,skip, (exp|postfix_exp|prefix_exp|string) ,skip.
-postfix_exp --> id ,increment_decrease_op , skip .
-prefix_exp --> increment_decrease_op , id , skip.
+assignment_exp --> id ,skip, assignment_op ,skip, (exp|postfix_exp|prefix_exp|string) ,skip,!.
+postfix_exp --> id ,increment_decrease_op , skip ,!.
+prefix_exp --> increment_decrease_op , id , skip,!.
 
-if_stmt --> skip , if_keyword  , skip ,stmt_condition, skip , stmt, skip  , opt_stmts.
-else_stmt-->skip, else_keyword , required_space , skip ,stmt , skip .
-else_if_stmt --> skip , else_keyword ,required_space, skip , if_stmt ,skip .
-opt_stmts --> skip , (else_stmt|else_if_stmt), skip , opt_stmts | [] .
 
-while_stmt --> skip , while_keyword ,skip , stmt_condition ,skip , stmt, skip.
-for_stmt --> skip , for_keyword , skip,for_condition ,skip, stmt,skip .
-do_while_stmt --> skip,do_keyword , skip,stmt ,skip, while_keyword , skip,stmt_condition ,skip, semicolon_op,skip .
 
-switch_case_stmt --> skip , switch_keyword , switch_case_condition , skip , switch_body , skip.
-switch_body --> skip,open_curlybracket,skip,case_stmts ,skip,(default_stmt|[]), skip,close_curlybracket.
-case_stmt --> skip , case_keyword ,required_space, skip, (string|digits) , skip, double_douts ,skip , stmts , skip , (break_stmt|[]), skip .
-break_stmt -->skip,break_keyword,skip,semicolon_op.
-default_stmt--> skip , default_keyword , skip , double_douts , skip , stmts , skip , (break_stmt|[]), skip .
-case_stmts --> skip,case_stmt , skip , case_stmts , skip | [].
+if_stmt --> skip , if_keyword  , skip ,stmt_condition, skip , stmt, skip  , opt_stmts,!.
+else_stmt-->skip, else_keyword , required_space , skip ,stmt , skip ,!.
+else_stmt-->skip, else_keyword ,skip,open_curlybracket,skip,stmt,skip,close_curlybracket, skip , !.
+else_if_stmt --> skip , else_keyword ,required_space, skip , if_stmt ,skip,! .
+opt_stmts --> skip , (else_stmt|else_if_stmt), skip , opt_stmts ,!| [] ,!.
+
+while_stmt --> skip , while_keyword ,skip , stmt_condition ,skip , stmt, skip , !.
+for_stmt --> skip , for_keyword , skip,for_condition ,skip, stmt,skip ,!.
+do_while_stmt --> skip,do_keyword , skip,stmt ,skip, while_keyword , skip,stmt_condition ,skip, semicolon_op,skip ,!.
+
+switch_case_stmt --> skip , switch_keyword , switch_case_condition , skip , switch_body , skip,!.
+switch_body --> skip,open_curlybracket,skip,case_stmts ,skip,(default_stmt|[]), skip,close_curlybracket , !.
+case_stmt --> skip , case_keyword ,required_space, skip, (string|digits) , skip, double_douts ,skip , stmts , skip , (break_stmt|[]), skip ,!.
+break_stmt -->skip,break_keyword,skip,semicolon_op ,!.
+default_stmt--> skip , default_keyword , skip , double_douts , skip , stmts , skip , (break_stmt|[]), skip ,!.
+case_stmts --> skip,case_stmt , skip , case_stmts , skip , ! | [] , !.
 
 condition --> skip,factor,skip,relational_op,skip,factor,skip|skip,open_parenthesis,condition,close_parenthesis,skip,logical_op,skip,open_parenthesis,condition,close_parenthesis,skip.
 stmt_condition --> skip,open_parenthesis ,skip,condition ,skip, close_parenthesis,skip .
-for_condition --> skip,open_parenthesis,skip,(assignment_exp | [] ),skip,semicolon_op,skip,condition,skip,semicolon_op,skip,( postfix_exp | prefix_exp),skip,close_parenthesis,skip.
+for_condition --> skip,open_parenthesis,skip,(assignment_exp | [] ),skip,semicolon_op,skip,condition,skip,semicolon_op,skip,( postfix_exp | prefix_exp|[]),skip,close_parenthesis,skip.
 switch_case_condition --> skip,open_parenthesis,skip,id,skip,close_parenthesis.
 
 exp --> term , skip, rest .
