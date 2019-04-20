@@ -43,9 +43,6 @@
 
 main(SourceCode):-
     atom_chars(SourceCode, TokenList) ,
-    % tokenize_atom(SourceCode,TokenList),
-    write(TokenList),
-    % switch_case_stmt(TokenList,[]),
     stmts(TokenList,[]) ,
     write("syntax free"), 
     ! ;
@@ -62,7 +59,11 @@ assignment_exp --> id ,skip, assignment_op ,skip, (exp|postfix_exp|prefix_exp|st
 postfix_exp --> id ,increment_decrease_op , skip .
 prefix_exp --> increment_decrease_op , id , skip.
 
-if_stmt --> skip , if_keyword  , skip ,stmt_condition, skip , stmt, skip .
+if_stmt --> skip , if_keyword  , skip ,stmt_condition, skip , stmt, skip  , opt_stmts.
+else_stmt-->skip, else_keyword , required_space , skip ,stmt , skip .
+else_if_stmt --> skip , else_keyword ,required_space, skip , if_stmt ,skip .
+opt_stmts --> skip , (else_stmt|else_if_stmt), skip , opt_stmts | [] .
+
 while_stmt --> skip , while_keyword ,skip , stmt_condition ,skip , stmt, skip.
 for_stmt --> skip , for_keyword , skip,for_condition ,skip, stmt,skip .
 do_while_stmt --> skip,do_keyword , skip,stmt ,skip, while_keyword , skip,stmt_condition ,skip, semicolon_op,skip .
@@ -74,6 +75,11 @@ break_stmt -->skip,break_keyword,skip,semicolon_op.
 default_stmt--> skip , default_keyword , skip , double_douts , skip , stmts , skip , (break_stmt|[]), skip .
 case_stmts --> skip,case_stmt , skip , case_stmts , skip | [].
 
+condition --> skip,factor,skip,relational_op,skip,factor,skip|skip,open_parenthesis,condition,close_parenthesis,skip,logical_op,skip,open_parenthesis,condition,close_parenthesis,skip.
+stmt_condition --> skip,open_parenthesis ,skip,condition ,skip, close_parenthesis,skip .
+for_condition --> skip,open_parenthesis,skip,(assignment_exp | [] ),skip,semicolon_op,skip,condition,skip,semicolon_op,skip,( postfix_exp | prefix_exp),skip,close_parenthesis,skip.
+switch_case_condition --> skip,open_parenthesis,skip,id,skip,close_parenthesis.
+
 exp --> term , skip, rest .
 rest --> skip , plus_minus_op , skip , term ,skip, rest ; [] . 
  
@@ -81,11 +87,6 @@ term --> factor ,skip , rest1 , skip .
 rest1 --> skip , multiplication_division_op ,skip, term ,skip, rest1 ,skip ; [] .
 
 factor --> skip,digits,skip | skip,id,skip | skip,open_parenthesis,skip,exp,skip,close_parenthesis,skip .
-
-condition --> skip,factor,skip,relational_op,skip,factor,skip|skip,open_parenthesis,condition,close_parenthesis,skip,logical_op,skip,open_parenthesis,condition,close_parenthesis,skip.
-stmt_condition --> skip,open_parenthesis ,skip,condition ,skip, close_parenthesis,skip .
-for_condition --> skip,open_parenthesis,skip,(assignment_exp | [] ),skip,semicolon_op,skip,condition,skip,semicolon_op,skip,( postfix_exp | prefix_exp),skip,close_parenthesis,skip.
-switch_case_condition --> skip,open_parenthesis,skip,id,skip,close_parenthesis.
 
 % means there are zero or more spaces
 skip -->  ([' '];['\t'];['\n'];['\r']), skip ; [] .
@@ -128,6 +129,7 @@ quote -->['"']|['\''].
 
 % key words 
 if_keyword --> ['i','f'].
+else_keyword --> ['e','l','s','e'].
 while_keyword --> ['w','h','i','l','e'] .
 for_keyword --> ['f','o','r'].
 do_keyword --> ['d','o'].
