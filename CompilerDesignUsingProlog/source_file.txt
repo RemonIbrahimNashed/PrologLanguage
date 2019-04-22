@@ -1,8 +1,5 @@
-main(){
+main(int x){
 
-    if(i == idxsize)
-        size = datasize - idx;
-    ret = seqsrch2;
-    if(ret>=0)
-        ret = idx;
+    int x[10];
+
 }

@@ -19,14 +19,15 @@ parse_from_string(SourceCode):-
 
 
 
-
-main_function --> skip , main_keyword, skip,open_parenthesis,skip,close_parenthesis,skip,open_curlybracket,skip,stmts,skip,close_curlybracket,skip.
+argument--> skip,data_type,required_space,skip,id,skip .
+argument_list--> skip ,argument ,skip, argument_list ,skip; [] .   
+main_function --> skip , (data_type,required_space,skip |[]),main_keyword, skip,open_parenthesis,skip,argument_list,close_parenthesis,skip,open_curlybracket,skip,stmts,skip,close_curlybracket,skip.
 % stmt --> skip , assignment_stmt ,skip,!|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
 stmts --> skip ,stmt , skip ,stmts,skip | [] ,!.
 
 stmt --> skip , assignment_stmt ,skip,!|skip,define_stmt,skip, !|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
 
-define_stmt --> skip,data_type ,skip, ((id ,skip,semicolon_op)|assignment_stmt) ,skip ,! .
+define_stmt --> skip,data_type ,required_space,skip,((id ,skip,semicolon_op)|assignment_stmt) ,skip ,! .
 
 %to define var with value e.g string x = "agmay";
 % define_stmt --> skip,(int_keyword|long_keyword|short_keyword) ,skip, id ,skip,assignment_op,skip,digits,skip,semicolon_op,skip ,!.
@@ -95,7 +96,9 @@ letter --> ['a'];['b'];['c'];['d'];['e'];['f'];['g'];['h'];['i'];['j'];['k'];['l
 letter --> ['A'];['B'];['C'];['D'];['E'];['F'];['G'];['H'];['I'];['J'];['K'];['L'];['M'];['N'];['O'];['P'];['Q'];['R'];['S'];['T'];['U'];['V'];['W'];['X'];['Y'];['Z'].
 letter_or_digit --> letter ; digit .
 zero_or_more_letter_or_digit --> letter_or_digit , zero_or_more_letter_or_digit ; [] . 
-id --> letter , zero_or_more_letter_or_digit .
+
+id2 --> letter , zero_or_more_letter_or_digit .
+id --> id2 ; id2, open_squarebracket,digits,close_squarebracket.
 
 string --> quote,(id|digits) , quote .    
 
