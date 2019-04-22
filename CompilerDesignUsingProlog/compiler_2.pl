@@ -12,7 +12,6 @@ parse_from_file(SourceFile):-
 
 parse_from_string(SourceCode):-
     atom_chars(SourceCode, TokenList) ,
-    % while_stmt(TokenList,[]),
     stmts(TokenList,[]) ,
     write("syntax free"), 
     ! ;
@@ -59,7 +58,7 @@ rest --> skip , plus_minus_op , skip , term ,skip, rest ; [] .
 term --> factor ,skip , rest1 , skip .
 rest1 --> skip , multiplication_division_op ,skip, term ,skip, rest1 ,skip ; [] .
 
-factor --> skip,digits,skip | skip,id,skip | skip,open_parenthesis,skip,exp,skip,close_parenthesis,skip .
+factor --> skip,decimal,skip | skip,id,skip | skip,open_parenthesis,skip,exp,skip,close_parenthesis,skip .
 
 % means there are zero or more spaces
 skip -->  ([' '];['\t'];['\n'];['\r']), skip ; [] .
@@ -69,7 +68,9 @@ required_space --> [' '].
 % terminals 
 
 digit --> ['0'];['1'];['2'];['3'];['4'];['5'];['6'];['7'];['8'];['9'].
-digits --> digit, digits ; digit .
+digits -->  digit, digits; digit.
+decimal --> (digit , (digits|[]) ,dot , digits) | digits.
+
 
 letter --> ['a'];['b'];['c'];['d'];['e'];['f'];['g'];['h'];['i'];['j'];['k'];['l'];['m'];['n'];['o'];['p'];['q'];['r'];['s'];['t'];['u'];['v'];['w'];['x'];['y'];['z'].
 letter --> ['A'];['B'];['C'];['D'];['E'];['F'];['G'];['H'];['I'];['J'];['K'];['L'];['M'];['N'];['O'];['P'];['Q'];['R'];['S'];['T'];['U'];['V'];['W'];['X'];['Y'];['Z'].
@@ -99,6 +100,7 @@ close_curlybracket --> ['}'].
 double_douts --> [':'].
 cout_op -->['<','<'].
 quote -->['"']|['\''].
+dot -->['.'].
 
 % key words 
 if_keyword --> ['i','f'].
