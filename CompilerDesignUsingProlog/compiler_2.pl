@@ -37,7 +37,7 @@ define_stmt --> skip,data_type ,required_space,skip,((id ,skip,semicolon_op)|ass
 
 
 %to define more than var with same datatype e.g int x,y,a;
-define_stmt --> skip,data_type ,skip, id, followed_ids,skip,semicolon_op,skip ,!.
+define_stmt --> skip,data_type ,required_space,skip, id, followed_ids,skip,semicolon_op,skip ,!.
 followed_id-->skip,comma,skip,id,skip.
 followed_ids-->skip ,followed_id , skip ,followed_ids,skip | [] ,!.
 
@@ -69,7 +69,7 @@ case_stmts --> skip,case_stmt , skip , case_stmts , skip , ! | [] , !.
 
 condition --> skip,factor,skip,relational_op,skip,factor,skip|skip,open_parenthesis,condition,close_parenthesis,skip,logical_op,skip,open_parenthesis,condition,close_parenthesis,skip.
 stmt_condition --> skip,open_parenthesis ,skip,condition ,skip, close_parenthesis,skip .
-for_condition --> skip,open_parenthesis,skip,(assignment_exp | [] ),skip,semicolon_op,skip,condition,skip,semicolon_op,skip,( postfix_exp | prefix_exp|[]),skip,close_parenthesis,skip.
+for_condition --> skip,open_parenthesis,skip,(assignment_exp | [] ),skip,semicolon_op,skip,(condition|[]),skip,semicolon_op,skip,( assignment_exp|postfix_exp | prefix_exp|[]),skip,close_parenthesis,skip.
 switch_case_condition --> skip,open_parenthesis,skip,id,skip,close_parenthesis.
 
 exp --> term , skip, rest .
