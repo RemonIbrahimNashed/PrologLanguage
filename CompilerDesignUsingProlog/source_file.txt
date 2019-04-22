@@ -1,4 +1,8 @@
-main()
-{
-    int x , y ;
+main(){
+
+    if(i == idxsize)
+        size = datasize - idx;
+    ret = seqsrch2;
+    if(ret>=0)
+        ret = idx;
 }

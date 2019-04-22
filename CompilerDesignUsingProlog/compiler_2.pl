@@ -18,18 +18,21 @@ parse_from_string(SourceCode):-
     write("syntax error"),!.
 
 
+
+
 main_function --> skip , main_keyword, skip,open_parenthesis,skip,close_parenthesis,skip,open_curlybracket,skip,stmts,skip,close_curlybracket,skip.
 % stmt --> skip , assignment_stmt ,skip,!|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
 stmts --> skip ,stmt , skip ,stmts,skip | [] ,!.
 
 stmt --> skip , assignment_stmt ,skip,!|skip,define_stmt,skip, !|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
 
-define_stmt --> skip,data_type ,skip, id ,skip,semicolon_op,skip ,!.
+define_stmt --> skip,data_type ,skip, ((id ,skip,semicolon_op)|assignment_stmt) ,skip ,! .
+
 %to define var with value e.g string x = "agmay";
-define_stmt --> skip,(int_keyword|long_keyword|short_keyword) ,skip, id ,skip,assignment_op,skip,digits,skip,semicolon_op,skip ,!.
-define_stmt --> skip,(double_keyword|float_keyword) ,skip, id ,skip,assignment_op,skip,decimal,skip,semicolon_op,skip ,!.
-define_stmt --> skip,string_keyword ,skip, id ,skip,assignment_op,skip,string,skip,semicolon_op,skip ,!.
-define_stmt --> skip,char_keyword ,skip, id ,skip,assignment_op,skip,quote,letter,quote,skip,semicolon_op,skip ,!.
+% define_stmt --> skip,(int_keyword|long_keyword|short_keyword) ,skip, id ,skip,assignment_op,skip,digits,skip,semicolon_op,skip ,!.
+% define_stmt --> skip,(double_keyword|float_keyword) ,skip, id ,skip,assignment_op,skip,decimal,skip,semicolon_op,skip ,!.
+% define_stmt --> skip,string_keyword ,skip, id ,skip,assignment_op,skip,string,skip,semicolon_op,skip ,!.
+% define_stmt --> skip,char_keyword ,skip, id ,skip,assignment_op,skip,quote,letter,quote,skip,semicolon_op,skip ,!.
 
 
 %to define more than var with same datatype e.g int x,y,a;
@@ -140,3 +143,6 @@ string_keyword --> ['s','t','r','i','n','g'].
 char_keyword --> ['c','h','a','r'].
 long_keyword -->['l','o','n','g'].
 short_keyword-->['s','h','o','r','t'].
+
+start:-
+    parse_from_file('source_file.txt').
