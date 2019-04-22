@@ -1,4 +1,3 @@
-
 %read the source code file as one string
 read(File,End,String):-
     open(File,read,In),
@@ -32,14 +31,20 @@ prefix_exp --> increment_decrease_op , id , skip,!.
 
 
 if_stmt --> skip , if_keyword  , skip ,stmt_condition, skip , stmt, skip  , opt_stmts,!.
+if_stmt --> skip , if_keyword  , skip ,stmt_condition, skip ,open_curlybracket, skip, stmts, skip,close_curlybracket ,skip, opt_stmts,!.
 else_stmt-->skip, else_keyword , required_space , skip ,stmt , skip ,!.
-else_stmt-->skip, else_keyword ,skip,open_curlybracket,skip,stmt,skip,close_curlybracket, skip , !.
+else_stmt-->skip, else_keyword ,skip,open_curlybracket, skip, stmts , skip,close_curlybracket, skip ,!.
 else_if_stmt --> skip , else_keyword ,required_space, skip , if_stmt ,skip,! .
+else_if_stmt --> skip , else_keyword ,required_space, skip , if_stmt ,skip,open_curlybracket, skip, stmts , skip,close_curlybracket,skip,! .
 opt_stmts --> skip , (else_stmt|else_if_stmt), skip , opt_stmts ,!| [] ,!.
 
 while_stmt --> skip , while_keyword ,skip , stmt_condition ,skip , stmt, skip , !.
+while_stmt --> skip , while_keyword ,skip , stmt_condition ,skip ,open_curlybracket, skip, stmts , skip,close_curlybracket,skip , !.
 for_stmt --> skip , for_keyword , skip,for_condition ,skip, stmt,skip ,!.
+for_stmt --> skip , for_keyword , skip,for_condition ,skip,open_curlybracket, skip, stmts , skip,close_curlybracket,skip ,!.
 do_while_stmt --> skip,do_keyword , skip,stmt ,skip, while_keyword , skip,stmt_condition ,skip, semicolon_op,skip ,!.
+do_while_stmt --> skip,do_keyword , skip,open_curlybracket, skip, stmts , skip,close_curlybracket,skip, while_keyword , skip,stmt_condition ,skip, semicolon_op,skip ,!.
+
 
 switch_case_stmt --> skip , switch_keyword , switch_case_condition , skip , switch_body , skip,!.
 switch_body --> skip,open_curlybracket,skip,case_stmts ,skip,(default_stmt|[]), skip,close_curlybracket , !.
