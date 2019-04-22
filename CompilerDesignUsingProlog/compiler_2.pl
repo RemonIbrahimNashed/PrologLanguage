@@ -12,13 +12,13 @@ parse_from_file(SourceFile):-
 
 parse_from_string(SourceCode):-
     atom_chars(SourceCode, TokenList) ,
-    stmts(TokenList,[]) ,
+    main_function(TokenList,[]) ,
     write("syntax free"), 
     ! ;
     write("syntax error"),!.
 
 
-
+main_function --> skip , main_keyword, skip,open_parenthesis,skip,close_parenthesis,skip,open_curlybracket,skip,stmts,skip,close_curlybracket,skip.
 stmt --> skip , assignment_stmt ,skip,!|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
 stmts --> skip ,stmt , skip ,stmts,skip | [] ,!.
 
@@ -113,3 +113,4 @@ case_keyword -->['c','a','s','e'].
 print_keyword --> ['c','o','u','t'].
 break_keyword --> ['b','r','e','a','k'].
 default_keyword -->['d','e','f','a','u','l','t'].
+main_keyword -->['m','a','i','n'].
