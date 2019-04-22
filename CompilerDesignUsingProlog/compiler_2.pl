@@ -19,8 +19,23 @@ parse_from_string(SourceCode):-
 
 
 main_function --> skip , main_keyword, skip,open_parenthesis,skip,close_parenthesis,skip,open_curlybracket,skip,stmts,skip,close_curlybracket,skip.
-stmt --> skip , assignment_stmt ,skip,!|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
+% stmt --> skip , assignment_stmt ,skip,!|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
 stmts --> skip ,stmt , skip ,stmts,skip | [] ,!.
+
+stmt --> skip , assignment_stmt ,skip,!|skip,define_stmt,skip, !|skip,break_stmt,skip, !|skip,switch_case_stmt,skip,!| skip,if_stmt,skip,!|skip, while_stmt ,skip,!| skip,for_stmt, skip,!|skip , do_while_stmt ,skip,!|skip , open_curlybracket ,skip, stmts ,skip,  close_curlybracket,skip , !.
+
+define_stmt --> skip,data_type ,skip, id ,skip,semicolon_op,skip ,!.
+%to define var with value e.g string x = "agmay";
+define_stmt --> skip,(int_keyword|long_keyword|short_keyword) ,skip, id ,skip,assignment_op,skip,digits,skip,semicolon_op,skip ,!.
+define_stmt --> skip,(double_keyword|float_keyword) ,skip, id ,skip,assignment_op,skip,decimal,skip,semicolon_op,skip ,!.
+define_stmt --> skip,string_keyword ,skip, id ,skip,assignment_op,skip,string,skip,semicolon_op,skip ,!.
+define_stmt --> skip,char_keyword ,skip, id ,skip,assignment_op,skip,quote,letter,quote,skip,semicolon_op,skip ,!.
+
+
+%to define more than var with same datatype e.g int x,y,a;
+define_stmt --> skip,data_type ,skip, id, followed_ids,skip,semicolon_op,skip ,!.
+followed_id-->skip,comma,skip,id,skip.
+followed_ids-->skip ,followed_id , skip ,followed_ids,skip | [] ,!.
 
 assignment_stmt --> assignment_exp, skip , semicolon_op , skip ,!|skip ,  postfix_exp , skip , semicolon_op , skip,! |skip ,  prefix_exp , skip , semicolon_op , skip ,!.
 
@@ -28,6 +43,7 @@ assignment_exp --> id ,skip, assignment_op ,skip, (exp|postfix_exp|prefix_exp|st
 postfix_exp --> id ,increment_decrease_op , skip ,!.
 prefix_exp --> increment_decrease_op , id , skip,!.
 
+data_type --> int_keyword | double_keyword | float_keyword | string_keyword | char_keyword |long_keyword |short_keyword.
 
 
 if_stmt --> skip , if_keyword  , skip ,stmt_condition, skip , stmt, skip  , opt_stmts,!.
@@ -97,10 +113,13 @@ open_parenthesis --> ['('].
 close_parenthesis --> [')'] .
 open_curlybracket -->['{'].
 close_curlybracket --> ['}'].
+open_squarebracket -->['['].
+close_squarebracket --> [']'].
 double_douts --> [':'].
 cout_op -->['<','<'].
 quote -->['"']|['\''].
 dot -->['.'].
+comma --> [','].
 
 % key words 
 if_keyword --> ['i','f'].
@@ -114,3 +133,10 @@ print_keyword --> ['c','o','u','t'].
 break_keyword --> ['b','r','e','a','k'].
 default_keyword -->['d','e','f','a','u','l','t'].
 main_keyword -->['m','a','i','n'].
+int_keyword --> ['i','n','t'].
+double_keyword --> ['d','o','u','b','l','e'].
+float_keyword --> ['f','l','o','a','t'].
+string_keyword --> ['s','t','r','i','n','g'].
+char_keyword --> ['c','h','a','r'].
+long_keyword -->['l','o','n','g'].
+short_keyword-->['s','h','o','r','t'].
