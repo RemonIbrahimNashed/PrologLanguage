@@ -97,7 +97,7 @@ condition2 -->  inner_condition , logical_op , inner_condition ,! .
 condition --> (condition1|condition2),!.
 
 stmt_condition --> skip,open_parenthesis ,skip,condition ,skip, close_parenthesis,skip .
-for_condition --> skip,open_parenthesis,skip,(assignment_exp | [] ),skip,semicolon_op,skip,(condition|[]),skip,semicolon_op,skip,( assignment_exp|postfix_exp | prefix_exp|[]),skip,close_parenthesis,skip.
+for_condition --> skip,open_parenthesis,skip,(((assignment_exp| [] ),skip,semicolon_op)|define_stmt),skip,(condition|[]),skip,semicolon_op,skip,( assignment_exp|postfix_exp | prefix_exp|[]),skip,close_parenthesis,skip.
 switch_case_condition --> skip,open_parenthesis,skip,id,skip,close_parenthesis.
 
 % comment_stmt --> skip,forward_slash,astrik,skip,stmts,skip,astrik,forward_slash,skip,!.
