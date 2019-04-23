@@ -1,5 +1,17 @@
-main(int x){
+#include <iostream.h>
+#include 'iostream.h'
+#include <iostream.h>
 
-    for(;;x=x+1)x++;
+#define x 8.89
+#define x 8.89
 
+int x();
+int main(){
+    double x =1.5;
+    int x[10];
+    /* x = 0; */
+    
+    return;
 }
+
+
